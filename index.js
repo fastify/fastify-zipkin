@@ -9,11 +9,12 @@ const Some = zipkin.option.Some
 const None = zipkin.option.None
 const Instrumentation = zipkin.Instrumentation
 
+const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
+const { HttpLogger } = require('zipkin-transport-http')
+const CLSContext = require('zipkin-context-cls')
+
 function zipkinPlugin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
-  const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
-  const { HttpLogger } = require('zipkin-transport-http')
-  const CLSContext = require('zipkin-context-cls')
 
   const recorder = new BatchRecorder({
     logger: new HttpLogger({
