@@ -4,14 +4,13 @@ const url = require('url')
 const fp = require('fastify-plugin')
 const zipkin = require('zipkin')
 const assert = require('assert')
+const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
+const { HttpLogger } = require('zipkin-transport-http')
+const CLSContext = require('zipkin-context-cls')
 
 const Some = zipkin.option.Some
 const None = zipkin.option.None
 const Instrumentation = zipkin.Instrumentation
-
-const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
-const { HttpLogger } = require('zipkin-transport-http')
-const CLSContext = require('zipkin-context-cls')
 
 function zipkinPlugin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
