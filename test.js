@@ -8,6 +8,36 @@ const zipkin = require('zipkin')
 const Tracer = zipkin.Tracer
 const ExplicitContext = zipkin.ExplicitContext
 
+test('Should error when initializing the plugin without serviceName argument', t => {
+  const fastify = Fastify()
+
+  const record = sinon.spy()
+  const recorder = { record }
+  const ctxImpl = new ExplicitContext()
+  const tracer = new Tracer({ recorder, ctxImpl })
+  const zipkinUrl = 'http://0.0.0.0:9441'
+
+  ctxImpl.scoped(() => {
+    t.throws(() => fastify.register(zipkinPlugin, { tracer, zipkinUrl }).after(), {}, 'serviceName option should not be empty')
+    t.end()
+  })
+})
+
+test('Should error when initializing the plugin without zipkinUrl argument', t => {
+  const fastify = Fastify()
+
+  const record = sinon.spy()
+  const recorder = { record }
+  const ctxImpl = new ExplicitContext()
+  const tracer = new Tracer({ recorder, ctxImpl })
+  const serviceName = 'test'
+
+  ctxImpl.scoped(() => {
+    t.throws(() => fastify.register(zipkinPlugin, { tracer, serviceName }).after(), {}, 'zipkinUrl option should not be empty')
+    t.end()
+  })
+})
+
 test('Should register the hooks and trace the request', t => {
   const fastify = Fastify()
 
@@ -15,10 +45,12 @@ test('Should register the hooks and trace the request', t => {
   const recorder = { record }
   const ctxImpl = new ExplicitContext()
   const serviceName = 'test'
+  const zipkinUrl = 'http://0.0.0.0:9441'
+
   const tracer = new Tracer({ recorder, ctxImpl })
 
   ctxImpl.scoped(() => {
-    fastify.register(zipkinPlugin, { tracer, serviceName })
+    fastify.register(zipkinPlugin, { tracer, serviceName, zipkinUrl })
 
     fastify.get('/', (req, reply) => {
       reply.code(201).send({ hello: 'world' })
@@ -64,9 +96,10 @@ test('Should register the hooks and trace the request (404)', t => {
   const ctxImpl = new ExplicitContext()
   const serviceName = 'test'
   const tracer = new Tracer({ recorder, ctxImpl })
+  const zipkinUrl = 'http://0.0.0.0:9441'
 
   ctxImpl.scoped(() => {
-    fastify.register(zipkinPlugin, { tracer, serviceName })
+    fastify.register(zipkinPlugin, { tracer, serviceName, zipkinUrl })
 
     fastify.inject({
       url: '/404',
@@ -91,11 +124,12 @@ test('Should record a reasonably accurate span duration', t => {
   const recorder = { record }
   const ctxImpl = new ExplicitContext()
   const serviceName = 'test'
+  const zipkinUrl = 'http://0.0.0.0:9441'
   const tracer = new Tracer({ recorder, ctxImpl })
   const PAUSE_TIME_MILLIS = 100
 
   ctxImpl.scoped(() => {
-    fastify.register(zipkinPlugin, { tracer, serviceName })
+    fastify.register(zipkinPlugin, { tracer, serviceName, zipkinUrl })
 
     fastify.get('/', (req, reply) => {
       setTimeout(() => {
