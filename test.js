@@ -17,10 +17,12 @@ test('Should error when initializing the plugin without serviceName argument', t
   const tracer = new Tracer({ recorder, ctxImpl })
   const zipkinUrl = 'http://0.0.0.0:9441'
 
-  ctxImpl.scoped(() => {
-    t.throws(() => fastify.register(zipkinPlugin, { tracer, zipkinUrl }).after(), {}, 'serviceName option should not be empty')
-    t.end()
-  })
+  t.throws(
+    () => fastify.register(zipkinPlugin, { tracer, zipkinUrl }).after(),
+    {},
+    'serviceName option should not be empty'
+  )
+  t.end()
 })
 
 test('Should error when initializing the plugin without zipkinUrl argument', t => {
@@ -32,10 +34,12 @@ test('Should error when initializing the plugin without zipkinUrl argument', t =
   const tracer = new Tracer({ recorder, ctxImpl })
   const serviceName = 'test'
 
-  ctxImpl.scoped(() => {
-    t.throws(() => fastify.register(zipkinPlugin, { tracer, serviceName }).after(), {}, 'zipkinUrl option should not be empty')
-    t.end()
-  })
+  t.throws(
+    () => fastify.register(zipkinPlugin, { tracer, serviceName }).after(),
+    {},
+    'zipkinUrl option should not be empty'
+  )
+  t.end()
 })
 
 test('Should register the hooks and trace the request', t => {
@@ -56,35 +60,44 @@ test('Should register the hooks and trace the request', t => {
       reply.code(201).send({ hello: 'world' })
     })
 
-    fastify.inject({
-      url: '/',
-      method: 'GET',
-      headers: {
-        'X-B3-TraceId': 'aaa',
-        'X-B3-SpanId': 'bbb',
-        'X-B3-Flags': '1'
-      }
-    }, (err, res) => {
-      t.error(err)
+    fastify.inject(
+      {
+        url: '/',
+        method: 'GET',
+        headers: {
+          'X-B3-TraceId': 'aaa',
+          'X-B3-SpanId': 'bbb',
+          'X-B3-Flags': '1'
+        }
+      },
+      (err, res) => {
+        t.error(err)
 
-      const annotations = record.args.map((args) => args[0])
-      annotations.forEach((ann) => t.strictEqual(ann.traceId.traceId, 'aaa'))
-      annotations.forEach((ann) => t.strictEqual(ann.traceId.spanId, 'bbb'))
-      t.strictEqual(annotations[0].annotation.annotationType, 'ServiceName')
-      t.strictEqual(annotations[0].annotation.serviceName, serviceName)
-      t.strictEqual(annotations[1].annotation.annotationType, 'Rpc')
-      t.strictEqual(annotations[1].annotation.name, 'GET')
-      t.strictEqual(annotations[2].annotation.annotationType, 'BinaryAnnotation')
-      t.strictEqual(annotations[2].annotation.key, 'http.path')
-      t.strictEqual(annotations[2].annotation.value, '/')
-      t.strictEqual(annotations[3].annotation.annotationType, 'ServerRecv')
-      t.strictEqual(annotations[4].annotation.annotationType, 'LocalAddr')
-      t.strictEqual(annotations[5].annotation.annotationType, 'BinaryAnnotation')
-      t.strictEqual(annotations[5].annotation.key, 'http.status_code')
-      t.strictEqual(annotations[5].annotation.value, '201')
-      t.strictEqual(annotations[6].annotation.annotationType, 'ServerSend')
-      t.end()
-    })
+        const annotations = record.args.map(args => args[0])
+        annotations.forEach(ann => t.strictEqual(ann.traceId.traceId, 'aaa'))
+        annotations.forEach(ann => t.strictEqual(ann.traceId.spanId, 'bbb'))
+        t.strictEqual(annotations[0].annotation.annotationType, 'ServiceName')
+        t.strictEqual(annotations[0].annotation.serviceName, serviceName)
+        t.strictEqual(annotations[1].annotation.annotationType, 'Rpc')
+        t.strictEqual(annotations[1].annotation.name, 'GET')
+        t.strictEqual(
+          annotations[2].annotation.annotationType,
+          'BinaryAnnotation'
+        )
+        t.strictEqual(annotations[2].annotation.key, 'http.path')
+        t.strictEqual(annotations[2].annotation.value, '/')
+        t.strictEqual(annotations[3].annotation.annotationType, 'ServerRecv')
+        t.strictEqual(annotations[4].annotation.annotationType, 'LocalAddr')
+        t.strictEqual(
+          annotations[5].annotation.annotationType,
+          'BinaryAnnotation'
+        )
+        t.strictEqual(annotations[5].annotation.key, 'http.status_code')
+        t.strictEqual(annotations[5].annotation.value, '201')
+        t.strictEqual(annotations[6].annotation.annotationType, 'ServerSend')
+        t.end()
+      }
+    )
   })
 })
 
@@ -101,19 +114,25 @@ test('Should register the hooks and trace the request (404)', t => {
   ctxImpl.scoped(() => {
     fastify.register(zipkinPlugin, { tracer, serviceName, zipkinUrl })
 
-    fastify.inject({
-      url: '/404',
-      method: 'GET'
-    }, (err, res) => {
-      t.error(err)
+    fastify.inject(
+      {
+        url: '/404',
+        method: 'GET'
+      },
+      (err, res) => {
+        t.error(err)
 
-      const annotations = record.args.map((args) => args[0])
-      t.strictEqual(annotations[5].annotation.annotationType, 'BinaryAnnotation')
-      t.strictEqual(annotations[5].annotation.key, 'http.status_code')
-      t.strictEqual(annotations[5].annotation.value, '' + res.statusCode)
+        const annotations = record.args.map(args => args[0])
+        t.strictEqual(
+          annotations[5].annotation.annotationType,
+          'BinaryAnnotation'
+        )
+        t.strictEqual(annotations[5].annotation.key, 'http.status_code')
+        t.strictEqual(annotations[5].annotation.value, '' + res.statusCode)
 
-      t.end()
-    })
+        t.end()
+      }
+    )
   })
 })
 
@@ -137,19 +156,22 @@ test('Should record a reasonably accurate span duration', t => {
       }, PAUSE_TIME_MILLIS)
     })
 
-    fastify.inject({
-      url: '/',
-      method: 'GET'
-    }, (err, res) => {
-      t.error(err)
+    fastify.inject(
+      {
+        url: '/',
+        method: 'GET'
+      },
+      (err, res) => {
+        t.error(err)
 
-      const annotations = record.args.map((args) => args[0])
-      const serverRecvTs = annotations[3].timestamp / 1000.0
-      const serverSendTs = annotations[6].timestamp / 1000.0
-      const durationMillis = (serverSendTs - serverRecvTs)
-      t.ok(durationMillis >= PAUSE_TIME_MILLIS)
+        const annotations = record.args.map(args => args[0])
+        const serverRecvTs = annotations[3].timestamp / 1000.0
+        const serverSendTs = annotations[6].timestamp / 1000.0
+        const durationMillis = serverSendTs - serverRecvTs
+        t.ok(durationMillis >= PAUSE_TIME_MILLIS)
 
-      t.end()
-    })
+        t.end()
+      }
+    )
   })
 })

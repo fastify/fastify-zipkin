@@ -1,7 +1,11 @@
 'use strict'
 
 const { HttpLogger } = require('zipkin-transport-http')
-const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
+const {
+  Tracer,
+  BatchRecorder,
+  jsonEncoder: { JSON_V2 }
+} = require('zipkin')
 const assert = require('assert')
 const CLSContext = require('zipkin-context-cls')
 const fp = require('fastify-plugin')
@@ -16,6 +20,8 @@ function zipkinPlugin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
   assert(opts.zipkinUrl, 'zipkinUrl option should not be empty')
 
+  const ctxImpl = new CLSContext('zipkin')
+
   const recorder = new BatchRecorder({
     logger: new HttpLogger({
       endpoint: `${opts.zipkinUrl}/api/v2/spans`,
@@ -23,13 +29,15 @@ function zipkinPlugin (fastify, opts, next) {
     })
   })
 
-  const ctxImpl = new CLSContext('zipkin')
-
   let tracer
   if (opts.tracer) {
     tracer = opts.tracer
   } else {
-    tracer = new Tracer({ ctxImpl, recorder, localServiceName: opts.serviceName })
+    tracer = new Tracer({
+      ctxImpl,
+      recorder,
+      localServiceName: opts.serviceName
+    })
   }
 
   const instrumentation = new Instrumentation.HttpServer({
@@ -64,10 +72,7 @@ function zipkinPlugin (fastify, opts, next) {
 
   function onResponse (req, reply, done) {
     tracer.scoped(() => {
-      instrumentation.recordResponse(
-        reply._zipkinId,
-        reply.res.statusCode
-      )
+      instrumentation.recordResponse(reply._zipkinId, reply.res.statusCode)
     })
     done()
   }
