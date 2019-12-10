@@ -85,6 +85,6 @@ function basic404 (req, reply) {
 }
 
 module.exports = fp(zipkinPlugin, {
-  fastify: '>= 2',
+  fastify: '^2.0.0',
   name: 'fastify-zipkin'
 })
