@@ -1,12 +1,12 @@
 'use strict'
 
-const url = require('url')
-const fp = require('fastify-plugin')
-const zipkin = require('zipkin')
-const assert = require('assert')
-const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
 const { HttpLogger } = require('zipkin-transport-http')
+const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
+const assert = require('assert')
 const CLSContext = require('zipkin-context-cls')
+const fp = require('fastify-plugin')
+const url = require('url')
+const zipkin = require('zipkin')
 
 const Some = zipkin.option.Some
 const None = zipkin.option.None
@@ -14,6 +14,7 @@ const Instrumentation = zipkin.Instrumentation
 
 function zipkinPlugin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
+  assert(opts.zipkinUrl, 'zipkinUrl option should not be empty')
 
   const recorder = new BatchRecorder({
     logger: new HttpLogger({
@@ -23,10 +24,16 @@ function zipkinPlugin (fastify, opts, next) {
   })
 
   const ctxImpl = new CLSContext('zipkin')
-  const tracer = new Tracer({ ctxImpl, recorder, localServiceName: opts.serviceName })
+
+  let tracer
+  if (opts.tracer) {
+    tracer = opts.tracer
+  } else {
+    tracer = new Tracer({ ctxImpl, recorder, localServiceName: opts.serviceName })
+  }
 
   const instrumentation = new Instrumentation.HttpServer({
-    tracer: opts.tracer || tracer,
+    tracer,
     serviceName: opts.serviceName,
     port: opts.servicePort || 0
   })
