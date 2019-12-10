@@ -10,7 +10,8 @@ npm i fastify-zipkin --save
 ```
 
 ## Usage
-Require the plugin and register it within Fastify, the pass the following options: `{ tracer [, serviceName] [, port] }`
+Require the plugin and register it within Fastify, the pass the following options: `{ tracer, serviceName [, servicePort] }`
+
 ```js
 const fastify = require('fastify')()
 
