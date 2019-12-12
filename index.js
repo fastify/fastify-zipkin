@@ -1,7 +1,15 @@
 'use strict'
 
-const url = require('url')
+const { HttpLogger } = require('zipkin-transport-http')
+const {
+  Tracer,
+  BatchRecorder,
+  jsonEncoder: { JSON_V2 }
+} = require('zipkin')
+const assert = require('assert')
+const CLSContext = require('zipkin-context-cls')
 const fp = require('fastify-plugin')
+const url = require('url')
 const zipkin = require('zipkin')
 
 const Some = zipkin.option.Some
@@ -9,13 +17,33 @@ const None = zipkin.option.None
 const Instrumentation = zipkin.Instrumentation
 
 function zipkinPlugin (fastify, opts, next) {
-  const tracer = opts.tracer
-  if (tracer == null) return next(new Error('No tracer specified'))
+  assert(opts.serviceName, 'serviceName option should not be empty')
+  assert(opts.zipkinUrl, 'zipkinUrl option should not be empty')
+
+  const ctxImpl = new CLSContext('zipkin')
+
+  const recorder = new BatchRecorder({
+    logger: new HttpLogger({
+      endpoint: `${opts.zipkinUrl}/api/v2/spans`,
+      jsonEncoder: JSON_V2
+    })
+  })
+
+  let tracer
+  if (opts.tracer) {
+    tracer = opts.tracer
+  } else {
+    tracer = new Tracer({
+      ctxImpl,
+      recorder,
+      localServiceName: opts.serviceName
+    })
+  }
 
   const instrumentation = new Instrumentation.HttpServer({
-    tracer: tracer,
+    tracer,
     serviceName: opts.serviceName,
-    port: opts.port || 0
+    port: opts.servicePort || 0
   })
 
   try {
@@ -30,26 +58,23 @@ function zipkinPlugin (fastify, opts, next) {
   fastify.addHook('onRequest', onRequest)
   fastify.addHook('onResponse', onResponse)
 
-  function onRequest (req, res, next) {
+  function onRequest (req, res, done) {
     tracer.scoped(() => {
       var id = instrumentation.recordRequest(
-        req.method,
-        url.format(req.url),
+        req.raw.method,
+        url.format(req.raw.url),
         readHeader.bind(req.headers)
       )
       res._zipkinId = id
-      next()
+      done()
     })
   }
 
-  function onResponse (res, next) {
+  function onResponse (req, reply, done) {
     tracer.scoped(() => {
-      instrumentation.recordResponse(
-        res._zipkinId,
-        res.statusCode
-      )
+      instrumentation.recordResponse(reply._zipkinId, reply.res.statusCode)
     })
-    next()
+    done()
   }
 
   function readHeader (header) {
@@ -57,7 +82,6 @@ function zipkinPlugin (fastify, opts, next) {
     if (val != null) return new Some(val)
     return None
   }
-
   next()
 }
 
@@ -66,6 +90,6 @@ function basic404 (req, reply) {
 }
 
 module.exports = fp(zipkinPlugin, {
-  fastify: '>=0.40.0',
+  fastify: '^2.0.0',
   name: 'fastify-zipkin'
 })

@@ -10,27 +10,16 @@ npm i fastify-zipkin --save
 ```
 
 ## Usage
-Require the plugin and register it within Fastify, the pass the following options: `{ tracer [, serviceName] [, port] }`
+Require the plugin and register it within Fastify, the pass the following options: `{ tracer, serviceName [, servicePort] }`
+
 ```js
 const fastify = require('fastify')()
 
-const { Tracer, BatchRecorder, jsonEncoder: { JSON_V2 } } = require('zipkin')
-const { HttpLogger } = require('zipkin-transport-http')
-const CLSContext = require('zipkin-context-cls')
-
-const zipkinBaseUrl = 'http://localhost:9411'
-const recorder = new BatchRecorder({
-  logger: new HttpLogger({
-    endpoint: `${zipkinBaseUrl}/api/v2/spans`,
-    jsonEncoder: JSON_V2
-  })
+fastify.register(require('fastify-zipkin'), {
+  serviceName: 'my-service-name',
+  servicePort: 3000,
+  zipkinUrl: 'http://localhost:9411'
 })
-
-const ctxImpl = new CLSContext('zipkin')
-const localServiceName = 'service-name'
-const tracer = new Tracer({ ctxImpl, recorder, localServiceName })
-
-fastify.register(require('fastify-zipkin'), { tracer })
 
 fastify.get('/', (req, reply) => {
   reply.send({ hello: 'world' })
