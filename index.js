@@ -72,7 +72,7 @@ function zipkinPlugin (fastify, opts, next) {
 
   function onResponse (req, reply, done) {
     tracer.scoped(() => {
-      instrumentation.recordResponse(reply._zipkinId, reply.res.statusCode)
+      instrumentation.recordResponse(reply._zipkinId, reply.raw.statusCode)
     })
     done()
   }
@@ -90,6 +90,6 @@ function basic404 (req, reply) {
 }
 
 module.exports = fp(zipkinPlugin, {
-  fastify: '^2.0.0',
+  fastify: '>=3.x',
   name: 'fastify-zipkin'
 })

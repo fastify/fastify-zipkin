@@ -8,7 +8,7 @@ const zipkin = require('zipkin')
 const Tracer = zipkin.Tracer
 const ExplicitContext = zipkin.ExplicitContext
 
-test('Should error when initializing the plugin without serviceName argument', t => {
+test('Should error when initializing the plugin without serviceName argument', async t => {
   const fastify = Fastify()
 
   const record = sinon.spy()
@@ -17,15 +17,14 @@ test('Should error when initializing the plugin without serviceName argument', t
   const tracer = new Tracer({ recorder, ctxImpl })
   const zipkinUrl = 'http://0.0.0.0:9441'
 
-  t.throws(
-    () => fastify.register(zipkinPlugin, { tracer, zipkinUrl }).after(),
-    {},
-    'serviceName option should not be empty'
-  )
-  t.end()
+  try {
+    fastify.register(zipkinPlugin, { tracer, zipkinUrl })
+  } catch (e) {
+    t.equal(e.message, 'serviceName option should not be empty')
+  }
 })
 
-test('Should error when initializing the plugin without zipkinUrl argument', t => {
+test('Should error when initializing the plugin without zipkinUrl argument', async t => {
   const fastify = Fastify()
 
   const record = sinon.spy()
@@ -34,12 +33,11 @@ test('Should error when initializing the plugin without zipkinUrl argument', t =
   const tracer = new Tracer({ recorder, ctxImpl })
   const serviceName = 'test'
 
-  t.throws(
-    () => fastify.register(zipkinPlugin, { tracer, serviceName }).after(),
-    {},
-    'zipkinUrl option should not be empty'
-  )
-  t.end()
+  try {
+    fastify.register(zipkinPlugin, { tracer, serviceName })
+  } catch (e) {
+    t.equal(e.message, 'zipkinUrl option should not be empty')
+  }
 })
 
 test('Should register the hooks and trace the request', t => {
