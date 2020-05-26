@@ -1,6 +1,6 @@
 {
   "name": "fastify-zipkin",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Fastify plugin for Zipkin distributed tracing system.",
   "main": "index.js",
   "scripts": {
