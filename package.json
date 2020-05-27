@@ -32,7 +32,7 @@
     "fastify-plugin": "^2.0.0",
     "zipkin": "^0.19.1",
     "zipkin-context-cls": "^0.21.0",
-    "zipkin-transport-http": "^0.19.1"
+    "zipkin-transport-http": "^0.21.0"
   },
   "bugs": {
     "url": "https://github.com/fastify/fastify-zipkin/issues"
