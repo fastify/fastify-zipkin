@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "fastify-plugin": "^2.0.0",
-    "zipkin": "^0.21.0",
+    "zipkin": "^0.22.0",
     "zipkin-context-cls": "^0.21.0",
     "zipkin-transport-http": "^0.21.0"
   },
