@@ -18,21 +18,13 @@ const Instrumentation = zipkin.Instrumentation
 
 function zipkinPlugin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
-  assert(opts.zipkinUrl, 'zipkinUrl option should not be empty')
+  assert(opts.httpReporterUrl, 'httpReporterUrl option should not be empty')
 
   const ctxImpl = new CLSContext('zipkin')
 
-  let zipkinUrl = `${opts.zipkinUrl}/api/v2/spans`
-
-  // allow for user to provide complete url for
-  // use cases like using NewRelic Zipkin endpoints
-  if (opts.useCompleteZipkinUrl) {
-    zipkinUrl = opts.zipkinUrl
-  }
-
   const recorder = new BatchRecorder({
     logger: new HttpLogger({
-      endpoint: zipkinUrl,
+      endpoint: opts.httpReporterUrl,
       jsonEncoder: JSON_V2
     })
   })
