@@ -6,7 +6,7 @@ fastify.register(require('./index'), {
   serviceName: 'test',
   servicePort: '3000',
   zipkinUrl: 'http://localhost:9411'
-  // useCompleteZipkinUrl: true <- optional flag for indicating full use of provided url
+})
 
 fastify.get('/', (req, reply) => {
   reply.send({ hello: 'world' })
