@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "zipkin": "docker run -p 9411:9411 openzipkin/zipkin",
-    "test": "standard && tap test.js"
+    "test": "standard && tap test.js -t 120"
   },
   "repository": {
     "type": "git",
