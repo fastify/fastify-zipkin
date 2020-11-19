@@ -22,9 +22,17 @@ function zipkinPlugin (fastify, opts, next) {
 
   const ctxImpl = new CLSContext('zipkin')
 
+  let zipkinUrl = `${opts.zipkinUrl}/api/v2/spans`
+
+  // allow for user to provide complete url for
+  // use cases like using NewRelic Zipkin endpoints
+  if (opts.useCompleteZipkinUrl) {
+    zipkinUrl = opts.zipkinUrl
+  }
+
   const recorder = new BatchRecorder({
     logger: new HttpLogger({
-      endpoint: `${opts.zipkinUrl}/api/v2/spans`,
+      endpoint: zipkinUrl,
       jsonEncoder: JSON_V2
     })
   })
