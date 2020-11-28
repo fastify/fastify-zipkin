@@ -60,7 +60,7 @@ function zipkinPlugin (fastify, opts, next) {
 
   function onRequest (req, res, done) {
     tracer.scoped(() => {
-      var id = instrumentation.recordRequest(
+      const id = instrumentation.recordRequest(
         req.raw.method,
         url.format(req.raw.url),
         readHeader.bind(req.headers)
@@ -78,7 +78,7 @@ function zipkinPlugin (fastify, opts, next) {
   }
 
   function readHeader (header) {
-    var val = this[header.toLowerCase()]
+    const val = this[header.toLowerCase()]
     if (val != null) return new Some(val)
     return None
   }
