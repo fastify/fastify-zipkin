@@ -18,13 +18,13 @@ const Instrumentation = zipkin.Instrumentation
 
 function zipkinPlugin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
-  assert(opts.zipkinUrl, 'zipkinUrl option should not be empty')
+  assert(opts.httpReporterUrl, 'httpReporterUrl option should not be empty')
 
   const ctxImpl = new CLSContext('zipkin')
 
   const recorder = new BatchRecorder({
     logger: new HttpLogger({
-      endpoint: `${opts.zipkinUrl}/api/v2/spans`,
+      endpoint: opts.httpReporterUrl,
       jsonEncoder: JSON_V2
     })
   })

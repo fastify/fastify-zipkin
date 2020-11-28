@@ -18,7 +18,7 @@ const fastify = require('fastify')()
 fastify.register(require('fastify-zipkin'), {
   serviceName: 'my-service-name',
   servicePort: 3000,
-  zipkinUrl: 'http://localhost:9411'
+  httpReporterUrl: 'http://localhost:9411/api/v2/spans'
 })
 
 fastify.get('/', (req, reply) => {
