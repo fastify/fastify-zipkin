@@ -1,6 +1,9 @@
 # fastify-zipkin
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
+![CI](https://github.com/fastify/fastify-zipkin/workflows/CI/badge.svg)
+[![NPM version](https://img.shields.io/npm/v/fastify-zipkin.svg?style=flat)](https://www.npmjs.com/package/fastify-zipkin)
+[![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-zipkin/badge.svg)](https://snyk.io/test/github/fastify/fastify-zipkin)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 Fastify plugin for Zipkin distributed tracing system.
 
