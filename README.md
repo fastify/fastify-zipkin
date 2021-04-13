@@ -5,7 +5,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-zipkin/badge.svg)](https://snyk.io/test/github/fastify/fastify-zipkin)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
-Fastify plugin for Zipkin distributed tracing system.
+Fastify plugin for [Zipkin](https://zipkin.io/) distributed tracing system.
 
 ## Install
 ```
@@ -13,7 +13,7 @@ npm i fastify-zipkin --save
 ```
 
 ## Usage
-Require the plugin and register it within Fastify, the pass the following options: `{ tracer, serviceName [, servicePort] }`
+Require the plugin and register it within Fastify, then pass the following options: `{ tracer, serviceName [, servicePort] }`
 
 ```js
 const fastify = require('fastify')()
