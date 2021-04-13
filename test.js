@@ -72,27 +72,27 @@ test('Should register the hooks and trace the request', t => {
         t.error(err)
 
         const annotations = record.args.map(args => args[0])
-        annotations.forEach(ann => t.strictEqual(ann.traceId.traceId, 'aaa'))
-        annotations.forEach(ann => t.strictEqual(ann.traceId.spanId, 'bbb'))
-        t.strictEqual(annotations[0].annotation.annotationType, 'ServiceName')
-        t.strictEqual(annotations[0].annotation.serviceName, serviceName)
-        t.strictEqual(annotations[1].annotation.annotationType, 'Rpc')
-        t.strictEqual(annotations[1].annotation.name, 'GET')
-        t.strictEqual(
+        annotations.forEach(ann => t.equal(ann.traceId.traceId, 'aaa'))
+        annotations.forEach(ann => t.equal(ann.traceId.spanId, 'bbb'))
+        t.equal(annotations[0].annotation.annotationType, 'ServiceName')
+        t.equal(annotations[0].annotation.serviceName, serviceName)
+        t.equal(annotations[1].annotation.annotationType, 'Rpc')
+        t.equal(annotations[1].annotation.name, 'GET')
+        t.equal(
           annotations[2].annotation.annotationType,
           'BinaryAnnotation'
         )
-        t.strictEqual(annotations[2].annotation.key, 'http.path')
-        t.strictEqual(annotations[2].annotation.value, '/')
-        t.strictEqual(annotations[3].annotation.annotationType, 'ServerRecv')
-        t.strictEqual(annotations[4].annotation.annotationType, 'LocalAddr')
-        t.strictEqual(
+        t.equal(annotations[2].annotation.key, 'http.path')
+        t.equal(annotations[2].annotation.value, '/')
+        t.equal(annotations[3].annotation.annotationType, 'ServerRecv')
+        t.equal(annotations[4].annotation.annotationType, 'LocalAddr')
+        t.equal(
           annotations[5].annotation.annotationType,
           'BinaryAnnotation'
         )
-        t.strictEqual(annotations[5].annotation.key, 'http.status_code')
-        t.strictEqual(annotations[5].annotation.value, '201')
-        t.strictEqual(annotations[6].annotation.annotationType, 'ServerSend')
+        t.equal(annotations[5].annotation.key, 'http.status_code')
+        t.equal(annotations[5].annotation.value, '201')
+        t.equal(annotations[6].annotation.annotationType, 'ServerSend')
         t.end()
       }
     )
@@ -121,12 +121,12 @@ test('Should register the hooks and trace the request (404)', t => {
         t.error(err)
 
         const annotations = record.args.map(args => args[0])
-        t.strictEqual(
+        t.equal(
           annotations[5].annotation.annotationType,
           'BinaryAnnotation'
         )
-        t.strictEqual(annotations[5].annotation.key, 'http.status_code')
-        t.strictEqual(annotations[5].annotation.value, '' + res.statusCode)
+        t.equal(annotations[5].annotation.key, 'http.status_code')
+        t.equal(annotations[5].annotation.value, '' + res.statusCode)
 
         t.end()
       }
