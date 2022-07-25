@@ -8,7 +8,7 @@ Fastify plugin for [Zipkin](https://zipkin.io/) distributed tracing system.
 
 ## Install
 ```
-npm i @fastify/zipkin --save
+npm i @fastify/zipkin
 ```
 
 ## Usage
