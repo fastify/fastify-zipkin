@@ -29,16 +29,11 @@ function zipkinPlugin (fastify, opts, next) {
     })
   })
 
-  let tracer
-  if (opts.tracer) {
-    tracer = opts.tracer
-  } else {
-    tracer = new Tracer({
-      ctxImpl,
-      recorder,
-      localServiceName: opts.serviceName
-    })
-  }
+  const tracer = opts.tracer || new Tracer({
+    ctxImpl,
+    recorder,
+    localServiceName: opts.serviceName
+  })
 
   const instrumentation = new Instrumentation.HttpServer({
     tracer,
