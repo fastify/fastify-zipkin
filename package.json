@@ -26,20 +26,8 @@
   "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
   "license": "MIT",
   "devDependencies": {
-<<<<<<< HEAD
     "@fastify/pre-commit": "2.0.2",
-<<<<<<< HEAD
     "fastify": "^4.3.0",
-=======
-    "fastify": "^3.8.0",
-<<<<<<< HEAD
->>>>>>> 2ec12f7 (remove node-fetch as dev dependency)
-=======
-=======
-    "fastify": "^4.3.0",
-    "node-fetch": "^2.6.1",
->>>>>>> d7748be (chore(deps-dev): bump fastify from 3.29.1 to 4.3.0 (#81))
->>>>>>> 649b503 (chore(deps-dev): bump fastify from 3.29.1 to 4.3.0 (#81))
     "sinon": "^14.0.0",
     "standard": "^17.0.0",
     "tap": "^16.0.0",
