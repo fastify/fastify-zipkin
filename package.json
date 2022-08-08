@@ -27,7 +27,11 @@
   "license": "MIT",
   "devDependencies": {
     "@fastify/pre-commit": "2.0.2",
+<<<<<<< HEAD
     "fastify": "^4.3.0",
+=======
+    "fastify": "^3.8.0",
+>>>>>>> 2ec12f7 (remove node-fetch as dev dependency)
     "sinon": "^14.0.0",
     "standard": "^17.0.0",
     "tap": "^16.0.0",
