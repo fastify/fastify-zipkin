@@ -22,7 +22,7 @@ function zipkinPlugin (fastify, opts, next) {
 
   const ctxImpl = new CLSContext('zipkin')
 
-  const recorder = new BatchRecorder({
+  const recorder = opts.recorder || new BatchRecorder({
     logger: new HttpLogger({
       endpoint: opts.httpReporterUrl,
       jsonEncoder: JSON_V2
