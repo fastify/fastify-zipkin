@@ -3,7 +3,7 @@
 const { test } = require('tap')
 const sinon = require('sinon')
 const Fastify = require('fastify')
-const zipkinPlugin = require('./index')
+const zipkinPlugin = require('..')
 const zipkin = require('zipkin')
 const Tracer = zipkin.Tracer
 const ExplicitContext = zipkin.ExplicitContext
