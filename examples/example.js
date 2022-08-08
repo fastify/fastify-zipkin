@@ -2,7 +2,7 @@
 
 const fastify = require('fastify')()
 
-fastify.register(require('./index'), {
+fastify.register(require('..'), {
   serviceName: 'test',
   servicePort: '3000',
   httpReporterUrl: 'http://localhost:9411/api/v2/spans'
