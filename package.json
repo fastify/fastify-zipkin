@@ -24,6 +24,7 @@
   "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
   "license": "MIT",
   "devDependencies": {
+    "@fastify/pre-commit": "2.0.2",
     "fastify": "^3.8.0",
     "node-fetch": "^2.6.1",
     "sinon": "^14.0.0",
@@ -42,5 +43,9 @@
   "homepage": "https://github.com/fastify/fastify-zipkin#readme",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }
