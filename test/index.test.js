@@ -3,7 +3,7 @@
 const { test } = require('tap')
 const sinon = require('sinon')
 const Fastify = require('fastify')
-const zipkinPlugin = require('./index')
+const zipkinPlugin = require('..')
 const zipkin = require('zipkin')
 const Tracer = zipkin.Tracer
 const ExplicitContext = zipkin.ExplicitContext
@@ -147,6 +147,45 @@ test('Should record a reasonably accurate span duration', t => {
 
   ctxImpl.scoped(() => {
     fastify.register(zipkinPlugin, { tracer, serviceName, httpReporterUrl })
+
+    fastify.get('/', (req, reply) => {
+      setTimeout(() => {
+        reply.send({ hello: 'world' })
+      }, PAUSE_TIME_MILLIS)
+    })
+
+    fastify.inject(
+      {
+        url: '/',
+        method: 'GET'
+      },
+      (err, res) => {
+        t.error(err)
+
+        const annotations = record.args.map(args => args[0])
+        const serverRecvTs = annotations[3].timestamp / 1000.0
+        const serverSendTs = annotations[6].timestamp / 1000.0
+        const durationMillis = serverSendTs - serverRecvTs
+        t.ok(durationMillis >= PAUSE_TIME_MILLIS)
+
+        t.end()
+      }
+    )
+  })
+})
+
+test('Should record a reasonably accurate span duration with custom recorder', t => {
+  const fastify = Fastify()
+
+  const record = sinon.spy()
+  const recorder = { record }
+  const ctxImpl = new ExplicitContext()
+  const serviceName = 'test'
+  const httpReporterUrl = 'http://0.0.0.0:9441/api/v2/spans'
+  const PAUSE_TIME_MILLIS = 100
+
+  ctxImpl.scoped(() => {
+    fastify.register(zipkinPlugin, { recorder, serviceName, httpReporterUrl })
 
     fastify.get('/', (req, reply) => {
       setTimeout(() => {
