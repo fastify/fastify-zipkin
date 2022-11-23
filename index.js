@@ -16,7 +16,7 @@ const Some = zipkin.option.Some
 const None = zipkin.option.None
 const Instrumentation = zipkin.Instrumentation
 
-function zipkinPlugin (fastify, opts, next) {
+function fastifyZipkin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
   assert(opts.httpReporterUrl, 'httpReporterUrl option should not be empty')
 
@@ -84,7 +84,9 @@ function basic404 (req, reply) {
   reply.code(404).send(new Error('Not found'))
 }
 
-module.exports = fp(zipkinPlugin, {
+module.exports = fp(fastifyZipkin, {
   fastify: '>=3.x',
   name: '@fastify/zipkin'
 })
+module.exports.default = fastifyZipkin
+module.exports.fastifyZipkin = fastifyZipkin
