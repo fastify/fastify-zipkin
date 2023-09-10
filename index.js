@@ -6,10 +6,10 @@ const {
   BatchRecorder,
   jsonEncoder: { JSON_V2 }
 } = require('zipkin')
-const assert = require('assert')
+const assert = require('node:assert')
 const CLSContext = require('zipkin-context-cls')
 const fp = require('fastify-plugin')
-const url = require('url')
+const url = require('node:url')
 const zipkin = require('zipkin')
 
 const Some = zipkin.option.Some
