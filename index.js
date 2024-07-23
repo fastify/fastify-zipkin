@@ -85,7 +85,7 @@ function basic404 (req, reply) {
 }
 
 module.exports = fp(fastifyZipkin, {
-  fastify: '>=3.x',
+  fastify: '>=5.x',
   name: '@fastify/zipkin'
 })
 module.exports.default = fastifyZipkin
