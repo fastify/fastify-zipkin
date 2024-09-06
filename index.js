@@ -6,17 +6,17 @@ const {
   BatchRecorder,
   jsonEncoder: { JSON_V2 }
 } = require('zipkin')
-const assert = require('assert')
+const assert = require('node:assert')
 const CLSContext = require('zipkin-context-cls')
 const fp = require('fastify-plugin')
-const url = require('url')
+const url = require('node:url')
 const zipkin = require('zipkin')
 
 const Some = zipkin.option.Some
 const None = zipkin.option.None
 const Instrumentation = zipkin.Instrumentation
 
-function zipkinPlugin (fastify, opts, next) {
+function fastifyZipkin (fastify, opts, next) {
   assert(opts.serviceName, 'serviceName option should not be empty')
   assert(opts.httpReporterUrl, 'httpReporterUrl option should not be empty')
 
@@ -84,7 +84,9 @@ function basic404 (req, reply) {
   reply.code(404).send(new Error('Not found'))
 }
 
-module.exports = fp(zipkinPlugin, {
-  fastify: '>=3.x',
+module.exports = fp(fastifyZipkin, {
+  fastify: '>=5.x',
   name: '@fastify/zipkin'
 })
+module.exports.default = fastifyZipkin
+module.exports.fastifyZipkin = fastifyZipkin

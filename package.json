@@ -1,8 +1,9 @@
 {
   "name": "@fastify/zipkin",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Fastify plugin for Zipkin distributed tracing system.",
   "main": "index.js",
+  "type": "commonjs",
   "types": "types/index.d.ts",
   "scripts": {
     "zipkin": "docker run -p 9411:9411 openzipkin/zipkin",
@@ -26,16 +27,16 @@
   "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
   "license": "MIT",
   "devDependencies": {
-    "@fastify/pre-commit": "2.0.2",
-    "fastify": "^4.3.0",
+    "@fastify/pre-commit": "2.1.0",
+    "fastify": "^5.0.0-alpha.4",
     "node-fetch": "^2.6.7",
-    "sinon": "^14.0.0",
+    "sinon": "^18.0.0",
     "standard": "^17.0.0",
     "tap": "^16.0.0",
-    "tsd": "^0.22.0"
+    "tsd": "^0.31.0"
   },
   "dependencies": {
-    "fastify-plugin": "^4.0.0",
+    "fastify-plugin": "^5.0.0",
     "zipkin": "^0.22.0",
     "zipkin-context-cls": "^0.22.0",
     "zipkin-transport-http": "^0.22.0"
