@@ -1,4 +1,0 @@
-timeout: 120
-
-files:
-  - test/**/*.test.js
