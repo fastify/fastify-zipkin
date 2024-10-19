@@ -46,7 +46,7 @@ function fastifyZipkin (fastify, opts, next) {
     // otherwise all the 404 requests
     // will not be catched by our hooks
     fastify.setNotFoundHandler(basic404)
-  } catch (err) {
+  } catch {
     // a custom error handler is already present
   }
 
