@@ -1,7 +1,7 @@
-import { FastifyPluginCallback } from 'fastify';
-import { Recorder, Tracer } from 'zipkin';
+import { FastifyPluginCallback } from 'fastify'
+import { Recorder, Tracer } from 'zipkin'
 
-type FastifyZipkin = FastifyPluginCallback<fastifyZipkin.FastifyZipkinOptions>;
+type FastifyZipkin = FastifyPluginCallback<fastifyZipkin.FastifyZipkinOptions>
 
 declare namespace fastifyZipkin {
   export interface FastifyZipkinOptions {
@@ -17,5 +17,5 @@ declare namespace fastifyZipkin {
 
 }
 
-declare function fastifyZipkin(...params: Parameters<FastifyZipkin>): ReturnType<FastifyZipkin>
+declare function fastifyZipkin (...params: Parameters<FastifyZipkin>): ReturnType<FastifyZipkin>
 export = fastifyZipkin

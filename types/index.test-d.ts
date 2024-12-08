@@ -13,7 +13,9 @@ fastify.register(zipkinPlugin, { serviceName: 'test', httpReporterUrl: 'http://'
 fastify.register(zipkinPlugin, { serviceName: 'test', httpReporterUrl: 'http://', servicePort: 0 })
 fastify.register(zipkinPlugin, { serviceName: 'test', httpReporterUrl: 'http://', recorder: new ConsoleRecorder() })
 fastify.register(zipkinPlugin, {
-  serviceName: 'test', httpReporterUrl: 'http://', tracer: new Tracer({
+  serviceName: 'test',
+  httpReporterUrl: 'http://',
+  tracer: new Tracer({
     ctxImpl: new ExplicitContext(),
     recorder: new ConsoleRecorder()
   })
