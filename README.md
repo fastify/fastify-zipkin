@@ -11,6 +11,19 @@ Fastify plugin for [Zipkin](https://zipkin.io/) distributed tracing system.
 npm i @fastify/zipkin
 ```
 
+### Compatibility
+| Plugin version | Fastify version |
+| ---------------|-----------------|
+| `^4.x`         | `^5.x`          |
+| `^3.x`         | `^4.x`          |
+| `^3.x`         | `^3.x`          |
+
+
+Please note that if a Fastify version is out of support, then so are the corresponding versions of this plugin
+in the table above.
+See [Fastify's LTS policy](https://github.com/fastify/fastify/blob/main/docs/Reference/LTS.md) for more details.
+
+
 ## Usage
 Require the plugin and register it within Fastify, then pass the following options: `{ serviceName, httpReporterUrl [, servicePort , tracer, recorder ] }`
 
