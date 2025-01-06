@@ -8,7 +8,7 @@ fastify.register(require('..'), {
   httpReporterUrl: 'http://localhost:9411/api/v2/spans'
 })
 
-fastify.get('/', (req, reply) => {
+fastify.get('/', (_req, reply) => {
   reply.send({ hello: 'world' })
 })
 

@@ -65,7 +65,7 @@ function fastifyZipkin (fastify, opts, next) {
     })
   }
 
-  function onResponse (req, reply, done) {
+  function onResponse (_req, reply, done) {
     tracer.scoped(() => {
       instrumentation.recordResponse(reply._zipkinId, reply.raw.statusCode)
     })
@@ -80,7 +80,7 @@ function fastifyZipkin (fastify, opts, next) {
   next()
 }
 
-function basic404 (req, reply) {
+function basic404 (_req, reply) {
   reply.code(404).send(new Error('Not found'))
 }
 

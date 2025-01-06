@@ -70,7 +70,7 @@ test('Should register the hooks and trace the request', t => {
   ctxImpl.scoped(() => {
     fastify.register(zipkinPlugin, { tracer, serviceName, httpReporterUrl })
 
-    fastify.get('/', (req, reply) => {
+    fastify.get('/', (_req, reply) => {
       reply.code(201).send({ hello: 'world' })
     })
 
@@ -84,7 +84,7 @@ test('Should register the hooks and trace the request', t => {
           'X-B3-Flags': '1'
         }
       },
-      (err, res) => {
+      (err) => {
         t.assert.ifError(err)
 
         const annotations = record.args.map(args => args[0])
@@ -161,7 +161,7 @@ test('Should record a reasonably accurate span duration', t => {
   ctxImpl.scoped(() => {
     fastify.register(zipkinPlugin, { tracer, serviceName, httpReporterUrl })
 
-    fastify.get('/', (req, reply) => {
+    fastify.get('/', (_req, reply) => {
       setTimeout(() => {
         reply.send({ hello: 'world' })
       }, PAUSE_TIME_MILLIS)
@@ -172,7 +172,7 @@ test('Should record a reasonably accurate span duration', t => {
         url: '/',
         method: 'GET'
       },
-      (err, res) => {
+      (err) => {
         t.assert.ifError(err)
 
         const annotations = record.args.map(args => args[0])
@@ -232,7 +232,7 @@ test('Should record a reasonably accurate span duration', t => {
   ctxImpl.scoped(() => {
     fastify.register(zipkinPlugin, { tracer, serviceName, httpReporterUrl })
 
-    fastify.get('/', (req, reply) => {
+    fastify.get('/', (_req, reply) => {
       setTimeout(() => {
         reply.send({ hello: 'world' })
       }, PAUSE_TIME_MILLIS)
@@ -243,7 +243,7 @@ test('Should record a reasonably accurate span duration', t => {
         url: '/',
         method: 'GET'
       },
-      (err, res) => {
+      (err) => {
         t.assert.ifError(err)
 
         const annotations = record.args.map(args => args[0])
@@ -270,7 +270,7 @@ test('Should record a reasonably accurate span duration with custom recorder', t
   ctxImpl.scoped(() => {
     fastify.register(zipkinPlugin, { recorder, serviceName, httpReporterUrl })
 
-    fastify.get('/', (req, reply) => {
+    fastify.get('/', (_req, reply) => {
       setTimeout(() => {
         reply.send({ hello: 'world' })
       }, PAUSE_TIME_MILLIS)
@@ -281,7 +281,7 @@ test('Should record a reasonably accurate span duration with custom recorder', t
         url: '/',
         method: 'GET'
       },
-      (err, res) => {
+      (err) => {
         t.assert.ifError(err)
 
         const annotations = record.args.map(args => args[0])
