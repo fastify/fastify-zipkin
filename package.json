@@ -54,7 +54,7 @@
     "neostandard": "^0.12.0",
     "node-fetch": "^2.6.7",
     "sinon": "^20.0.0",
-    "tsd": "^0.31.0"
+    "tsd": "^0.32.0"
   },
   "dependencies": {
     "fastify-plugin": "^5.0.0",
