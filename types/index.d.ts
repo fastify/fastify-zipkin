@@ -1,5 +1,5 @@
-import { FastifyPluginCallback } from 'fastify'
-import { Recorder, Tracer } from 'zipkin'
+import type { FastifyPluginCallback } from 'fastify'
+import type { Recorder, Tracer } from 'zipkin'
 
 type FastifyZipkin = FastifyPluginCallback<fastifyZipkin.FastifyZipkinOptions>
 
