@@ -1,13 +1,18 @@
 import Fastify from 'fastify'
-import { expectError } from 'tsd'
+import { expect } from 'tstyche'
 import { ConsoleRecorder, ExplicitContext, Tracer } from 'zipkin'
 import zipkinPlugin from '..'
 
 const fastify = Fastify()
 
-expectError(fastify.register(zipkinPlugin, { httpReporterUrl: 'a' }))
-expectError(fastify.register(zipkinPlugin, { serviceName: 'a' }))
-expectError(fastify.register(zipkinPlugin, { serviceName: 1, httpReporterUrl: '' }))
+expect(fastify.register).type.not.toBeCallableWith(zipkinPlugin, {
+  httpReporterUrl: 'a'
+})
+expect(fastify.register).type.not.toBeCallableWith(zipkinPlugin, { serviceName: 'a' })
+expect(fastify.register).type.not.toBeCallableWith(zipkinPlugin, {
+  serviceName: 1,
+  httpReporterUrl: ''
+})
 
 fastify.register(zipkinPlugin, { serviceName: 'test', httpReporterUrl: 'http://' })
 fastify.register(zipkinPlugin, { serviceName: 'test', httpReporterUrl: 'http://', servicePort: 0 })
