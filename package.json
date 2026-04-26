@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "c8 --100 node --test",
-    "test:typescript": "tsd",
+    "test:typescript": "tstyche",
     "zipkin": "docker run -p 9411:9411 openzipkin/zipkin"
   },
   "repository": {
@@ -54,7 +54,7 @@
     "neostandard": "^0.13.0",
     "node-fetch": "^2.6.7",
     "sinon": "^21.0.0",
-    "tsd": "^0.33.0"
+    "tstyche": "^7.0.0"
   },
   "dependencies": {
     "fastify-plugin": "^5.0.0",
