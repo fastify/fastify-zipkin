@@ -53,7 +53,7 @@
     "fastify": "^5.0.0",
     "neostandard": "^0.13.0",
     "node-fetch": "^2.6.7",
-    "sinon": "^21.0.0",
+    "sinon": "^22.0.0",
     "tstyche": "^7.0.0"
   },
   "dependencies": {
