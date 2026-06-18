@@ -57,7 +57,7 @@
     "tstyche": "^7.0.0"
   },
   "dependencies": {
-    "fastify-plugin": "^5.0.0",
+    "fastify-plugin": "^6.0.0",
     "zipkin": "^0.22.0",
     "zipkin-context-cls": "^0.22.0",
     "zipkin-transport-http": "^0.22.0"
